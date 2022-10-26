@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./dist/main.css" />
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Russo+One&display=swap"
+    rel="stylesheet" />
+
+  <!-- Alpine Plugins -->
+  <script defer src="https://unpkg.com/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script> -->
+  <script defer src="https://unpkg.com/alpinejs@3.10.3/dist/cdn.min.js"></script>
+
+  <title>Video - BASE Magazine</title>
+</head>
+
+<body>
+  <!-- HEADER SECTION START -->
+  <header class="fixed w-full h-[90px] ease-[cubic-bezier(.4,0,.2,1)] duration-300 transition-colors" :class="{
+      'z-40' : searchModalOpen || sidebarOpen,
+      'z-20' : !searchModalOpen && !sidebarOpen,
+      'bg-black/50' : headerScroll
+    }" x-data="{
+      sidebarOpen: false,
+      searchModalOpen: false,
+      headerScroll: false,
+      bodyOverflow: function (modal) {
+        document.querySelector('body').classList.remove('overflow-hidden', 'overflow-visible');
+        document.querySelector('body').classList.add(modal ? 'overflow-hidden' : 'overflow-visible');
+      },
+    }" @scroll.window="
+      if (window.pageYOffset > 10) {
+        headerScroll = true;
+      }else{
+        headerScroll = false;
+      }
+    ">
+    <div class="pr-[110px] pl-5 h-[90px] flex flex-row items-center w-full relative z-40">
+      <!-- LOGO -->
+      <a href="#"
+        class="duration-300 h-10 w-[126px] transition-opacity ease-[cubic-bezier(.4,0,.2,1)] hover:opacity-75">
+        <img src="images/mobWOW-Base-Logo-Red (2).svg" alt="Logo" class="max-w-full h-auto" />
+      </a>
+      <!-- HORIZONTAL NAVIGATION -->
+      <div class="flex-grow mx-auto h-full hidden lg:flex z-20 transition-all duration-500"
+        :class="sidebarOpen ? 'opacity-0 invisible' : 'opacity-100 visible delay-700'">
+        <ul
+          class="font-['Russo_One',_sans-serif] uppercase tracking-wide m-auto flex justify-end px-4 text-sm xl:text-base leading-none w-full gap-x-4 text-center">
+          <li class="mb-1">
+            <a href="#"
+              class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">News</a>
+          </li>
+          <li class="mb-1">
+            <a href="#"
+              class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">Features</a>
+          </li>
+          <li class="mb-1">
+            <a href="#"
+              class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">Videos</a>
+          </li>
+          <li class="mb-1">
+            <a href="#"
+              class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">Gear</a>
+          </li>
+          <li class="mb-1">
+            <a href="#"
+              class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">The
+              collective</a>
+          </li>
+          <li class="mb-1">
+            <a href="#"
+              class="text-white tracking-wide transition-all ease-[cubic-bezier(.4,0,.2,1)] hover:text-[#f79400]">magazine</a>
+          </li>
+        </ul>
+      </div>
+      <!-- DESKTOP SEARCH & CTA -->
+      <div class="hidden sm:flex items-center justify-self-end ml-auto">
+        <!-- SEARCH BTN -->
+        <a href="#" @click.prevent="searchModalOpen = true; bodyOverflow(searchModalOpen); sidebarOpen = false"
+          class="hidden xl:flex mr-6 duration-300 ease-[cubic-bezier(.4,0,.2,1)] transition-opacity hover:opacity-75 text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </a>
+        <!-- HEADER CTA -->
+        <a href="#"
+          class="px-3 py-2 md:py-3 whitespace-nowrap rounded-md ease-[cubic-bezier(.4,0,.2,1)] transition-all uppercase text-[15px] bg-[#f79400] text-white inline-flex items-center font-['Jost',_sans-serif] tracking-wider hover:bg-[#cb7900]">
+          Get your free magazine
+          <span class="ml-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd"
+                d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                clip-rule="evenodd" />
+            </svg>
+          </span>
+        </a>
+      </div>
+    </div>
+    <!-- HAMBURGER ICON -->
+    <button type="button" @click="sidebarOpen = !sidebarOpen"
+      class="fixed top-0 right-0 h-[90px] w-[90px] flex justify-items-center items-center hover:bg-[#f79400] transition-colors duration-300 focus:outline-none z-40"
+      :class="[sidebarOpen ? 'bg-[#f79400]' : 'bg-[#111111]']">
+      <div class="w-[40px] mx-auto transition-all duration-300" :class="{'opacity-0' : sidebarOpen}">
+        <span class="block h-0.5 bg-white mb-[7px] transition-all ease-[cubic-bezier(.4,0,.2,1)]"></span>
+        <span class="block h-0.5 bg-white mb-[7px] transition-all ease-[cubic-bezier(.4,0,.2,1)]"></span>
+        <span class="block h-0.5 w-[26px] bg-white transition-all ease-[cubic-bezier(.4,0,.2,1)]"></span>
+      </div>
+      <div class="absolute inset-0 p-8 transition-all duration-300" :class="{'opacity-0' : !sidebarOpen}">
+        <img src="images/close-white.svg" alt="Close Icon" />
+      </div>
+    </button>
+    <!-- SEARCH MODAL -->
+    <template x-if="true">
+      <div class="fixed inset-0 h-full w-full bg-[url('../images/textured-bg.jpg')] bg-repeat z-40"
+        x-show="searchModalOpen" x-transition:enter="transition ease-[cubic-bezier(.4,0,.2,1)] duration-500"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-[cubic-bezier(.4,0,.2,1)] duration-500"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <!-- CLOSE BUTTON -->
+        <button type="button" class="w-9 h-7 fixed top-5 right-5"
+          @click="searchModalOpen = false; bodyOverflow(searchModalOpen)">
+          <img src="images/close.svg" alt="Close Search Button" class="max-w-full h-auto" />
+        </button>
+        <!-- SEARCH MODAL CONTENT -->
+        <div class="container mx-auto px-4 flex h-full items-center">
+          <div class="flex-col md:w-6/12 mx-auto">
+            <!-- SEARCH HEADING -->
+            <h5
+              class="text-center font-['Russo_One',_sans-serif] uppercase tracking-wide text-[#111111] text-[22px] lg:text-[32px] mb-5">
+              Start your adventure here
+            </h5>
+            <!-- SEARCH BAR -->
+            <form class="w-full relative">
+              <!-- SEARCH INPUT -->
+              <input type="search"
+                class="w-full appearance-none bg-white border outline-none border-[#d3d3d3] focus:border-[#f79400] focus:ring-0 p-3 text-[19px] leading-[24px] rounded-lg font-['Jost',_sans-serif]"
+                placeholder="Search …" value="" name="s" />
+              <!-- SEARCH SUBMIT BUTTON -->
+              <button type="button"
+                class="absolute right-0 top-0 bottom-0 bg-[#f79400] w-14 rounded-r-md transition-colors hover:bg-[#cb7900] text-white flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                  stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </template>
+    <!-- SIDEBAR -->
+    <template x-if="true">
+      <div class="fixed inset-0 z-30 h-full w-full bg-[url('../images/textured-bg-grey.jpg')] bg-repeat"
+        x-show="sidebarOpen; bodyOverflow(sidebarOpen)"
+        x-transition:enter="transition ease-[cubic-bezier(.86,.01,.77,.78)] duration-700"
+        x-transition:enter-start="translate-x-full" x-transition:enter-end="translate-x-0"
+        x-transition:leave="transition ease-[cubic-bezier(.86,.01,.77,.78)] duration-700"
+        x-transition:leave-start="translate-x-0" x-transition:leave-end="translate-x-full" x-data="{
+        menuItems: [
+          { title: 'Subscribe now', url: '#'},
+          { title: 'News', url: '#'},
+          { title: 'Features', url: '#'},
+          { title: 'Videos', url: '#'},
+          { title: 'Gear', url: '#'},
+          { title: 'The collective', url: '#'},
+          { title: 'magazine', url: '#'},
+          { title: 'Contribute', url: '#'},
+          { title: 'Join Us', url: '#'},
+          { title: 'Get in touch', url: '#'},
+          { title: 'The base story', url: '#'},
+          { title: 'For advertisers & partners', url: '#'},
+          { title: 'My Account', url: '#'},
+        ]
+      }">
+        <!-- SIDEBAR CONTAINER -->
+        <div class="container px-4 mx-auto h-full">
+          <div class="block h-[95%] pt-32 items-center lg:w-6/12 overflow-y-auto">
+            <ul
+              class="flex flex-col w-full text-[27px] md:text-[35px] tracking-wide uppercase h-full overflow-y-scroll text-white font-['Russo_One',_sans-serif]">
+              <template x-for="item in menuItems" :key="item.title">
+                <li class="mb-0.5 w-full">
+                  <a :href="item.url" class="hover:text-[#f79400] transition-all w-full block" x-text="item.title"></a>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </div>
+        <!-- SIDEBAR DESKTOP SIDE IMAGE -->
+        <div class="hidden lg:block h-screen w-6/12 absolute inset-y-0 right-0 menu-mask">
+          <div class="w-full h-full">
+            <img src="images/sidebar-img.png" alt="" class="w-full h-full object-cover object-top" />
+          </div>
+        </div>
+      </div>
+    </template>
+  </header>
+  <!-- HEADER SECTION END -->
+  <!-- HERO SECTION START -->
+  <section class="relative bg-[url('../images/textured-bg-grey.jpg')] bg-repeat pt-36 md:pt-44 pb-32 md:pb-52">
+    <!-- HERO CONTAINER -->
+    <div class="container mx-auto px-4 relative z-[1] text-center mb-10">
+      <!-- BREADCRUMBS -->
+      <p class="mt-5 text-white mb-1 text-sm font-medium uppercase tracking-wide">
+        <span class="flex justify-center items-center">
+          <a href="#" class="font-bold transition-all hover:text-[#f79400]">
+            Home
+          </a>
+          <!-- SEPERATOR -->
+          <span class="flex items-center mx-2.5 opacity-50">
+            <img src="images/arrow-right-white.svg" alt="" class="h-2 w-2">
+          </span>
+          <span>VIDEO</span>
+        </span>
+      </p>
+      <!-- HERO HEADING -->
+      <h1 class="font-['Russo_One',_sans-serif] text-4xl md:text-5xl uppercase my-4 text-white">
+        EXPLORE OUR VIDEOS
+      </h1>
+      <p class="mb-5 leading-tight text-lg text-white font-['Jost',_sans-serif] max-w-4xl mx-auto">
+        Looking for adventure inspiration, sheer entertainment, or pro tips on a particular adventure skill?
+        You’re in the right place. It’s all here!
+      </p>
+    </div>
+    <!-- HERO FILTER CONTAINER -->
+    <div class="container mx-auto px-4 mt-16">
+      <form class="w-full grid grid-cols-12 bg-white max-w-screen-xl mx-auto rounded-lg overflow-hidden">
+        <!-- ALL FEATURES -->
+        <div class="col-span-6 lg:col-span-4 border-b border-r relative">
+          <img src="images/image-grey.svg" alt=""
+            class="hidden sm:block h-6 absolute left-3 top-2/4 -translate-y-1/2 opacity-50 max-w-full">
+          <select name="feature" id="feature"
+            class="w-full border-none h-12 md:h-14 rounded-lg p-2.5 sm:pl-12 outline-none focus:outline-none appearance-none text-base sm:text-xl bg-[url('../images/download.svg')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1.5em_1.5em] text-[#766d66] font-['Jost',_sans-serif]">
+            <option>All feature types</option>
+            <option>Interview</option>
+            <option>Photo Essay</option>
+            <option>Spotlight</option>
+            <option>Story</option>
+            <option>Video</option>
+          </select>
+        </div>
+        <!-- ALL ACTIVITY -->
+        <div class="col-span-6 lg:col-span-4 border-b border-r relative">
+          <img src="images/skiing-grey.svg" alt=""
+            class="hidden sm:block h-6 absolute left-3 top-2/4 -translate-y-1/2 opacity-50 max-w-full">
+          <select name="activity" id="activity"
+            class="w-full border-none h-12 md:h-14 rounded-lg p-2.5 sm:pl-12 outline-none focus:outline-none appearance-none text-base sm:text-xl bg-[url('../images/download.svg')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1.5em_1.5em] text-[#766d66] font-['Jost',_sans-serif]">
+            <option>All activity types</option>
+            <option>Base Jumping</option>
+            <option>Backpacking</option>
+            <option>Biking</option>
+            <option>Camping</option>
+            <option>Conservation</option>
+            <option>Cycling</option>
+          </select>
+        </div>
+        <!-- ALL DESTINATIONS -->
+        <div class="col-span-6 lg:col-span-4 border-b border-r relative">
+          <img src="images/map-grey.svg" alt=""
+            class="hidden sm:block h-6 absolute left-3 top-2/4 -translate-y-1/2 opacity-50 max-w-full">
+          <select name="destination" id="destination"
+            class="w-full border-none h-12 md:h-14 rounded-lg p-2.5 sm:pl-12 outline-none focus:outline-none appearance-none text-base sm:text-xl bg-[url('../images/download.svg')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1.5em_1.5em] text-[#766d66] font-['Jost',_sans-serif]">
+            <option>All destinations</option>
+            <option>Afghanistan</option>
+            <option>Albania</option>
+            <option>Andorra</option>
+            <option>Antarctica</option>
+            <option>Argentina</option>
+            <option>Australia</option>
+            <option>Pakistan</option>
+          </select>
+        </div>
+        <!-- ALL AUTHORS -->
+        <div class="col-span-6 lg:col-span-3 border-b border-r relative">
+          <img src="images/pen-grey.svg" alt=""
+            class="hidden sm:block h-6 absolute left-3 top-2/4 -translate-y-1/2 opacity-50 max-w-full">
+          <select name="authors" id="authors"
+            class="w-full border-none h-12 md:h-14 rounded-lg p-2.5 sm:pl-12 outline-none focus:outline-none appearance-none text-base sm:text-xl bg-[url('../images/download.svg')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1.5em_1.5em] text-[#766d66] font-['Jost',_sans-serif]">
+            <option>All Authors</option>
+            <option>Aaron Rolph</option>
+            <option>Adam Boggon</option>
+            <option>Aldo Kane</option>
+            <option>Aled Bath</option>
+            <option>Alex Metcalfe</option>
+            <option>Alice Bowers</option>
+            <option>Andreas B. Heide</option>
+            <option>Ángel Pérez Grimaldi</option>
+            <option>Angelo Concilio</option>
+            <option>Banff Mountain Film Festival</option>
+            <option>BASE editorial team</option>
+            <option>Belinda Kirk</option>
+            <option>Ben Horton</option>
+            <option>Benjamin Sutton</option>
+          </select>
+        </div>
+        <!-- ALL PHOTOGRAPHERS -->
+        <div class="col-span-6 lg:col-span-3 border-b border-r relative">
+          <img src="images/camera-grey.svg" alt=""
+            class="hidden sm:block h-6 absolute left-3 top-2/4 -translate-y-1/2 opacity-50 max-w-full">
+          <select name="photographers" id="photographers"
+            class="w-full border-none h-12 md:h-14 rounded-lg p-2.5 sm:pl-12 outline-none focus:outline-none appearance-none text-base sm:text-xl bg-[url('../images/download.svg')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1.5em_1.5em] text-[#766d66] font-['Jost',_sans-serif]">
+            <option>All Photographers</option>
+            <option>Aaron Rolph</option>
+            <option>Adam Boggon</option>
+            <option>Aldo Kane</option>
+            <option>Aled Bath</option>
+            <option>Alex Metcalfe</option>
+            <option>Alice Bowers</option>
+            <option>Andreas B. Heide</option>
+            <option>Ángel Pérez Grimaldi</option>
+            <option>Angelo Concilio</option>
+            <option>Banff Mountain Film Festival</option>
+            <option>BASE editorial team</option>
+            <option>Belinda Kirk</option>
+          </select>
+        </div>
+        <!-- KEYWORDS -->
+        <div class="col-span-6 lg:col-span-3 border-b border-r relative">
+          <img src="images/search-grey.svg" alt=""
+            class="hidden sm:block h-6 absolute left-3 top-2/4 -translate-y-1/2 opacity-50 max-w-full">
+          <input type="text" name="keyword" id="keyword" placeholder="Keyword"
+            class="text-[#766d66] font-['Jost',_sans-serif] h-12 md:h-14 rounded-lg p-2.5 sm:pl-12 outline-none focus:outline-none text-base sm:text-xl w-full">
+        </div>
+        <!-- FILTER BUTTON -->
+        <div class="col-span-12 lg:col-span-3 border-b border-r relative p-1">
+          <button type="submit"
+            class="w-full h-full px-3 py-2 md:py-3 whitespace-nowrap rounded-md ease-[cubic-bezier(.4,0,.2,1)] transition-all uppercase text-[15px] bg-[#f79400] text-white inline-flex items-center justify-center font-['Jost',_sans-serif] tracking-wider hover:bg-[#cb7900]">
+            Filter
+            <span class="ml-1">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                <path fill-rule="evenodd"
+                  d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <!-- HERO SECTION END -->
+  <!-- FEATURES SECTION START -->
+  <section class="py-10 md:py-16 bg-[url('../images/textured-bg.jpg')] bg-repeat relative z-0" x-data="{
+      featuresCards: [
+        {
+          title: 'Jasmine Harrison becomes first woman to swim the length of Great Britain',
+          detail: 'The 23 year-old arrived in John O’Groats on Tuesday afternoon',
+          meta: 'BASE editorial team',
+          date: 'October 20, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-1.webp',
+        },
+        {
+          title: 'Elnaz Rekabi returns to Iran amid fears for her safety',
+          detail: 'The professional climber may face persecution for defying Iranian hijab rules',
+          meta: 'Hannah Mitchell',
+          date: 'October 19, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-2.webp',
+        },
+        {
+          title: 'Exclusive Discount for Adventure Uncovered',
+          detail: 'The inaugural film festival is coming to Bristol',
+          meta: 'BASE editorial team',
+          date: 'October 11, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-3.webp',
+        },
+        {
+          title: 'Get Your Half Price Ticket for the National Snow Show',
+          detail: '15 – 16th October at the Birmingham NEC',
+          meta: 'BASE editorial team',
+          date: 'October 06, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-4.webp',
+        },
+        {
+          title: 'Skateboarding short film to premiere at Adventure Uncovered Festival',
+          detail: 'A Land for Everyone explores a shared belief that skateboarding is for all',
+          meta: 'BASE editorial team',
+          date: 'October 05, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-5.webp',
+        },
+        {
+          title: 'The Adventure Sports Events Conference is coming to Kendal',
+          detail: 'BASE will be proudly supporting ASEC 2022',
+          meta: 'BASE editorial team',
+          date: 'September 03, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-6.webp',
+        },
+        {
+          title: 'Body of Hilaree Nelson recovered from Manaslu',
+          detail: 'Members of the mountaineering community have paid tribute to the trailblazing athlete',
+          meta: 'BASE editorial team',
+          date: 'September 29, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-7.webp',
+        },
+        {
+          title: 'HILAREE NELSON MISSING ON MANASLU',
+          detail: 'With several trapped and at least one climber dead in unrelated incidents on the world’s 8th highest mountain',
+          meta: 'BASE editorial team',
+          date: 'September 27, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-8.webp',
+        },
+        {
+          title: 'Ross Edgley Ends Record Breaking Swim in Hospital',
+          detail: 'After swimming continuously for 2 days and 2 nights across Loch Ness',
+          meta: 'BASE editorial team',
+          date: 'September 26, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-9.webp',
+        },
+        {
+          title: 'Jasmine Harrison becomes first woman to swim the length of Great Britain',
+          detail: 'The 23 year-old arrived in John O’Groats on Tuesday afternoon',
+          meta: 'BASE editorial team',
+          date: 'October 20, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-1.webp',
+        },
+        {
+          title: 'Elnaz Rekabi returns to Iran amid fears for her safety',
+          detail: 'The professional climber may face persecution for defying Iranian hijab rules',
+          meta: 'Hannah Mitchell',
+          date: 'October 19, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-2.webp',
+        },
+        {
+          title: 'Exclusive Discount for Adventure Uncovered',
+          detail: 'The inaugural film festival is coming to Bristol',
+          meta: 'BASE editorial team',
+          date: 'October 11, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-3.webp',
+        },
+        {
+          title: 'Get Your Half Price Ticket for the National Snow Show',
+          detail: '15 – 16th October at the Birmingham NEC',
+          meta: 'BASE editorial team',
+          date: 'October 06, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-4.webp',
+        },
+        {
+          title: 'Skateboarding short film to premiere at Adventure Uncovered Festival',
+          detail: 'A Land for Everyone explores a shared belief that skateboarding is for all',
+          meta: 'BASE editorial team',
+          date: 'October 05, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-5.webp',
+        },
+        {
+          title: 'The Adventure Sports Events Conference is coming to Kendal',
+          detail: 'BASE will be proudly supporting ASEC 2022',
+          meta: 'BASE editorial team',
+          date: 'September 03, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-6.webp',
+        },
+        {
+          title: 'Body of Hilaree Nelson recovered from Manaslu',
+          detail: 'Members of the mountaineering community have paid tribute to the trailblazing athlete',
+          meta: 'BASE editorial team',
+          date: 'September 29, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-7.webp',
+        },
+        {
+          title: 'HILAREE NELSON MISSING ON MANASLU',
+          detail: 'With several trapped and at least one climber dead in unrelated incidents on the world’s 8th highest mountain',
+          meta: 'BASE editorial team',
+          date: 'September 27, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-8.webp',
+        },
+        {
+          title: 'Ross Edgley Ends Record Breaking Swim in Hospital',
+          detail: 'After swimming continuously for 2 days and 2 nights across Loch Ness',
+          meta: 'BASE editorial team',
+          date: 'September 26, 2022',
+          author: 'Hannah Mitchell',
+          url: '#',
+          imageSrc: 'images/card-9.webp',
+        },
+      ]
+    }">
+    <div class="container px-4 mx-auto">
+      <!-- FEATURES CARDS CONTAINER -->
+      <div class="grid grid-cols-12 gap-5 lg:gap-10 -mt-28 md:-mt-48">
+        <!-- FEATURES CARD -->
+        <template x-for="(card, index) in featuresCards" :key="index">
+          <div class="col-span-12 md:col-span-4 font-['Jost',_sans-serif]">
+            <div class="block">
+              <!-- CARD IMAGE -->
+              <a :href="card.url" class="h-64 md:h-56 lg:h-72 block mb-5 overflow-hidden">
+                <img :src="card.imageSrc" :alt="card.title" :title="card.title"
+                  class="object-cover object-center h-full w-full transition-transform ease-[cubic-bezier(.4,0,.2,1)] duration-300 scale-100 hover:scale-105" />
+              </a>
+              <!-- CARD META -->
+              <p class="mb-1 uppercase font-medium tracking-wide text-sm text-[#316094]">
+                <a class="text-grey uppercase" :href="card.url" href="#">Review</a>
+                •
+                <a class="text-grey uppercase" :href="card.url" x-text="card.author" href="#"></a>
+                • <span x-text="card.date"></span>
+              </p>
+              <!-- CARD HEADING -->
+              <h4 class="uppercase tracking-wide text-xl font-bold mb-2">
+                <a :href="card.url" class="text-[#111111] hover:text-[#766d66]" x-text="card.title">
+                </a>
+              </h4>
+              <!-- CARD DETAIL -->
+              <p class="mb-5 leading-tight text-xl text-[#454545]" x-text="card.detail"></p>
+            </div>
+          </div>
+        </template>
+      </div>
+      <!-- FEATURES PAGINATION -->
+      <div class="mt-5 text-center flex flex-wrap justify-center gap-1">
+        <a href="#"
+          class="p-3 text-base leading-5 inline-block rounded uppercase tracking-wider transition-all font-medium text-[#f79400] border border-[#f79400] pointer-events-none opacity-75">1</a>
+        <a href="#"
+          class="p-3 text-base leading-5 inline-block rounded uppercase tracking-wider transition-all font-medium text-[#f79400] border border-[#f79400] hover:text-white hover:bg-[#f79400]">2</a>
+        <a href="#"
+          class="p-3 text-base leading-5 inline-block rounded uppercase tracking-wider transition-all font-medium text-[#f79400] border border-[#f79400] hover:text-white hover:bg-[#f79400]">...</a>
+        <a href="#"
+          class="p-3 text-base leading-5 inline-block rounded uppercase tracking-wider transition-all font-medium text-[#f79400] border border-[#f79400] hover:text-white hover:bg-[#f79400]">13</a>
+      </div>
+    </div>
+  </section>
+  <!-- FEATURES SECTION END -->
+  <!-- FOOTER START -->
+  <footer class="bg-[url('../images/textured-bg-black.jpg')] bg-repeat pt-20 pb-5">
+    <!-- FOOTER PRIMARY -->
+    <div class="container mx-auto px-4 grid grid-cols-12 gap-5">
+      <!-- PRIMARY 1ST COL -->
+      <div class="col-span-12 md:col-span-12 lg:col-span-6 mb-5 lg:mb-0">
+        <div class="max-w-md">
+          <h5 class="text-[22px] md:text-[25px] font-['Russo_One',_sans-serif] mb-4 md:md-0 text-white uppercase">
+            DON’T MISS A SINGLE ADVENTURE
+          </h5>
+          <p class="text-white/75 font-['Jost',_sans-serif] md:text-lg mb-4">
+            Sign up <span class="font-bold">for free</span> today to get our weekly BASE newsletter. Made by adventurers
+            for adventurers. We distil the best
+            stories, reviews and news to whet your adventure appetite.
+          </p>
+          <form class="w-full relative">
+            <!-- EMAIL INPUT -->
+            <input type="search"
+              class="w-full appearance-none bg-white border outline-none border-[#d3d3d3] focus:border-[#f79400] focus:ring-0 py-2.5 px-3 text-[19px] leading-[24px] rounded-lg font-['Jost',_sans-serif]"
+              placeholder="Email Address" value="" name="e">
+            <!-- EMAIL SUBMIT BUTTON -->
+            <button type="button"
+              class="md:absolute mt-1.5 md:mt-0 w-full md:w-auto right-0 top-0 bottom-0 bg-[#f79400] rounded-md md:rounded-r-md md:rounded-l-none transition-colors hover:bg-[#cb7900] text-white flex items-center justify-center py-2.5 px-3 uppercase font-semibold">
+              Subscribe
+              <span class="ml-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                  <path fill-rule="evenodd"
+                    d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                    clip-rule="evenodd" />
+                </svg>
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- PRIMARY 2ND COL -->
+      <div class="col-span-6 md:col-span-4 lg:col-span-2">
+        <ul
+          class="flex flex-col justify-between w-full text-base mb-1 font-medium uppercase tracking-wide font-['Jost',_sans-serif] text-white">
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Features</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Videos</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Gear</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">The Collective</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">magazine</a>
+          </li>
+        </ul>
+      </div>
+      <!-- PRIMARY 3RD COL -->
+      <div class="col-span-6 md:col-span-4 lg:col-span-2">
+        <ul
+          class="flex flex-col justify-between w-full text-base mb-1 font-medium uppercase tracking-wide font-['Jost',_sans-serif] text-white">
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Contribute</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Join us</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">Get in touch</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">The BASE Story</a>
+          </li>
+          <li class="mb-0.5">
+            <a href="#" class="mb-2 block transition-all duration-300 hover:text-[#f79400]">For advertisers &
+              partners</a>
+          </li>
+        </ul>
+      </div>
+      <!-- PRIMARY 4TH COL -->
+      <div class="col-span-12 md:col-span-4 lg:col-span-2">
+        <ul class="flex flex-row">
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/instagram.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/youtube.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/linkedin.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+          <li class="mr-3 mb-1">
+            <a href="#" class="block opacity-100 transition-opacity hover:opacity-75">
+              <img src="images/facebook.svg" alt="" class="h-6 w-auto">
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- FOOTER SECONDARY -->
+    <div class="container mx-auto px-4 mt-10 md:mt-20 font-['Jost',_sans-serif]">
+      <div class="sm:flex sm:flex-row">
+        <p class="text-sm mb-0 text-white opacity-75">
+          © 2022 BASE Adventure Media Ltd
+          <span class="hidden sm:inline-block">•</span>
+        </p>
+        <ul class="flex flex-row flex-wrap sm:justify-between text-sm mb-0 text-white opacity-75 p-0">
+          <li class="mx-2">
+            <a href="#">
+              Privacy Policy
+            </a>
+          </li>
+          <li class="mx-2">
+            <a href="#">
+              Cookie Notice
+            </a>
+          </li>
+          <li class="mx-2">
+            <a href="#">
+              Website by Yellow Peach
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <!-- FOOTER END -->
+</body>
+
+</html>
